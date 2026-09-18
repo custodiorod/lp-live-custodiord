@@ -1,7 +1,25 @@
 {
   "headers": [
     {
-      "source": "/(hero-bg-(.*)\\.(avif|webp)|logo(-64)?\\.webp|favicon\\.svg)",
+      "source": "/hero-bg-:asset*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/logo:asset*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/favicon.svg",
       "headers": [
         {
           "key": "Cache-Control",
