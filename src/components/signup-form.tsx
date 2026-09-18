@@ -10,12 +10,25 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>
+  }
+}
+
 export function SignupForm() {
   const [submitted, setSubmitted] = useState(false)
   const [consent, setConsent] = useState(false)
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    window.dataLayer = window.dataLayer ?? []
+    window.dataLayer.push({
+      event: "lead_form_submitted",
+      form_name: "live_claude_code",
+    })
+
     setSubmitted(true)
   }
 
