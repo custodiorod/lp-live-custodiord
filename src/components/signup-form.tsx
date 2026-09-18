@@ -30,20 +30,82 @@ const WHATSAPP_GROUP_URL =
 
 export function SignupForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState("")
   const [consent, setConsent] = useState(false)
   const [joinDialogOpen, setJoinDialogOpen] = useState(false)
 
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    window.dataLayer = window.dataLayer ?? []
-    window.dataLayer.push({
-      event: "lead_form_submitted",
-      form_name: "live_claude_code",
-    })
+    if (submitting || submitted) return
 
-    setSubmitted(true)
-    setJoinDialogOpen(true)
+    setSubmitting(true)
+    setError("")
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const url = new URL(window.location.href)
+    const attributionKeys = [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "fbclid",
+      "gclid",
+    ] as const
+
+    const attribution = Object.fromEntries(
+      attributionKeys.map((key) => {
+        const currentValue = url.searchParams.get(key)
+        const storageKey = `lead_attribution_${key}`
+
+        if (currentValue) sessionStorage.setItem(storageKey, currentValue)
+
+        return [key, currentValue ?? sessionStorage.getItem(storageKey) ?? ""]
+      }),
+    )
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          website: formData.get("website"),
+          consent,
+          page_url: url.href,
+          ...attribution,
+        }),
+      })
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as {
+          error?: string
+        } | null
+        throw new Error(result?.error ?? "Não foi possível concluir sua inscrição.")
+      }
+
+      window.dataLayer = window.dataLayer ?? []
+      window.dataLayer.push({
+        event: "lead_form_submitted",
+        form_name: "live_claude_code",
+        lead_source: attribution.utm_source || "direct",
+      })
+
+      setSubmitted(true)
+      setJoinDialogOpen(true)
+    } catch (submissionError) {
+      setError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : "Não foi possível concluir sua inscrição.",
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -52,6 +114,16 @@ export function SignupForm() {
       <h3>Vem construir com a gente.</h3>
       <p className="form-intro">É rápido. É gratuito. É mão na massa.</p>
       <form onSubmit={handleSubmit} className="mt-5">
+        <div className="sr-only" aria-hidden="true">
+          <label htmlFor="website">Não preencha este campo</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="name">Seu nome</FieldLabel>
@@ -96,14 +168,21 @@ export function SignupForm() {
             variant="shiny"
             size="hero"
             type="submit"
-            disabled={submitted || !consent}
+            disabled={submitting || submitted || !consent}
           >
-            {submitted
-              ? "CONTINUE NO WHATSAPP"
-              : "GARANTIR MINHA VAGA GRATUITA"}
+            {submitting
+              ? "CONFIRMANDO SUA VAGA..."
+              : submitted
+                ? "CONTINUE NO WHATSAPP"
+                : "GARANTIR MINHA VAGA GRATUITA"}
           </Button>
         </FieldGroup>
       </form>
+      {error ? (
+        <p className="form-message" role="alert">
+          {error} Tente novamente em instantes.
+        </p>
+      ) : null}
       {submitted ? (
         <p className="form-message" role="status">
           Próximo passo: entre no grupo oficial para receber os avisos da live.
