@@ -1,0 +1,198 @@
+---
+import { SignupForm } from "@/components/signup-form"
+import { Badge } from "@/components/ui/badge"
+import { buttonVariants } from "@/components/ui/button"
+import Layout from "@/layouts/main.astro"
+
+const today = new Intl.DateTimeFormat("pt-BR", {
+  day: "numeric",
+  month: "long",
+  timeZone: "America/Sao_Paulo",
+})
+  .format(new Date())
+  .toLocaleUpperCase("pt-BR")
+
+const lessons = [
+  {
+    number: "01 / AGENTES",
+    title: ["IA COM UMA", "MISSÃO CLARA."],
+    description:
+      "Entenda como orientar um agente para executar tarefas com contexto, instruções e um objetivo definido.",
+  },
+  {
+    number: "02 / SKILLS",
+    title: ["ENSINE UMA VEZ.", "REUTILIZE DEPOIS."],
+    description:
+      "Veja como organizar processos e instruções em skills para repetir boas entregas sem começar do zero.",
+  },
+  {
+    number: "03 / MCPs",
+    title: ["CONECTE A IA", "ÀS SUAS FERRAMENTAS."],
+    description:
+      "Descubra como conectar o Claude Code a ferramentas e informações que já fazem parte da sua rotina.",
+  },
+]
+---
+
+<Layout>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="announcement" role="status">
+    <span class="announcement-desktop">
+      <span>AULÃO GRATUITO AO VIVO</span><span aria-hidden="true">•</span>
+      <strong>HOJE, {today}</strong><span aria-hidden="true">•</span>
+      <span>ÀS 20H</span>
+    </span>
+    <span class="announcement-mobile">AULÃO GRATUITO • HOJE, {today} • 20H</span
+    >
+  </div>
+
+  <main id="conteudo">
+    <section class="hero" aria-labelledby="hero-title">
+      <picture class="hero-bg" aria-hidden="true">
+        <source
+          media="(max-width: 900px)"
+          srcset="/hero-bg-mobile-720.avif 720w, /hero-bg-mobile.avif 900w"
+          sizes="100vw"
+          type="image/avif"
+        />
+        <source
+          media="(max-width: 900px)"
+          srcset="/hero-bg-mobile-720.webp 720w, /hero-bg-mobile.webp 900w"
+          sizes="100vw"
+          type="image/webp"
+        />
+        <source srcset="/hero-bg-desktop.avif" type="image/avif" />
+        <img
+          src="/hero-bg-desktop.webp"
+          alt=""
+          width="1360"
+          height="638"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+      <div class="hero-container">
+        <div
+          class="hero-copy flex flex-col items-start gap-0 max-md:items-center max-md:text-center"
+        >
+          <img
+            class="hero-logo"
+            src="/logo-64.webp"
+            alt="Custódio"
+            width="64"
+            height="64"
+            decoding="async"
+          />
+          <Badge variant="live">
+            <span class="live-dot" aria-hidden="true"></span>
+            AO VIVO COM RODRIGO CUSTÓDIO
+          </Badge>
+          <h1 id="hero-title">AULÃO GRATUITO<span>DE CLAUDE CODE</span></h1>
+          <p class="hero-hook">
+            Pare de só conversar com a IA.<strong
+              >Comece a construir com ela.</strong
+            >
+          </p>
+          <p class="hero-lead">
+            Agentes, skills e MCPs: veja o Custódio criar ao vivo e aprenda a
+            colocar a inteligência artificial para trabalhar na prática.
+          </p>
+          <div class="hero-details" aria-label="Detalhes do evento">
+            <span><b>20H</b> AO VIVO</span>
+            <span><b>ZERO</b> CUSTO</span>
+            <span><b>100%</b> MÃO NA MASSA</span>
+          </div>
+          <a
+            class={buttonVariants({ variant: "shiny", size: "hero" })}
+            href="#inscricao">QUERO PARTICIPAR DO AULÃO</a
+          >
+          <p class="cta-note">
+            Faça sua inscrição e entre no grupo do WhatsApp.
+          </p>
+        </div>
+      </div>
+      <a
+        class="scroll-cue"
+        href="#aprender"
+        aria-label="Ver o conteúdo do aulão"><span></span></a
+      >
+    </section>
+
+    <div class="topic-band" aria-label="Conteúdo do aulão">
+      <div class="shell">
+        <span>AGENTES</span><b>✳</b><span>SKILLS</span><b>✳</b><span>MCPs</span
+        ><b>✳</b><span>AUTOMAÇÕES</span><b>✳</b><span>NA PRÁTICA</span>
+      </div>
+    </div>
+
+    <section
+      id="aprender"
+      class="shell learn deferred-section"
+      aria-labelledby="learn-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">O QUE VAMOS CONSTRUIR</p>
+          <h2 id="learn-title">
+            MENOS TEORIA.<br /><em>MAIS MÃO NA MASSA.</em>
+          </h2>
+        </div>
+        <p>
+          Acompanhe a criação ao vivo e entenda como cada peça ajuda a
+          transformar uma ideia em execução.
+        </p>
+      </div>
+      <div class="lessons">
+        {
+          lessons.map((lesson) => (
+            <article>
+              <span class="lesson-number">{lesson.number}</span>
+              <h3>
+                {lesson.title[0]}
+                <br />
+                {lesson.title[1]}
+              </h3>
+              <p>{lesson.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      id="inscricao"
+      class="shell signup deferred-section"
+      aria-labelledby="signup-title"
+    >
+      <div class="signup-copy">
+        <p class="eyebrow">SEU PRÓXIMO PASSO</p>
+        <h2 id="signup-title">
+          SUA VAGA É<br /><em>GRATUITA.</em><br />A PRÁTICA É REAL.
+        </h2>
+        <p>
+          Preencha seus dados e entre no grupo para receber os avisos e o acesso
+          ao aulão.
+        </p>
+        <div class="signup-time">
+          <strong>20H</strong><span>AO VIVO<br />SEM REPLAY</span>
+        </div>
+        <p class="schedule-note">
+          A data da próxima aula será informada no grupo.
+        </p>
+      </div>
+      <SignupForm client:visible={{ rootMargin: "240px" }} />
+    </section>
+  </main>
+
+  <footer class="shell footer deferred-section">
+    <span class="footer-brand">custódio<span>↗</span></span>
+    <p>Aulão gratuito · Claude Code na prática</p>
+    <a
+      href="https://www.instagram.com/custodiorod/"
+      target="_blank"
+      rel="noreferrer">@custodiorod ↗</a
+    >
+  </footer>
+</Layout>
