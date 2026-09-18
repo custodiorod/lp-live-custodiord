@@ -23,8 +23,11 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-whatsapp: var(--whatsapp);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --radius-sm: calc(var(--radius) * 0.6);
@@ -38,6 +41,8 @@
   --foreground: #fff;
   --card: #0d0713;
   --card-foreground: #fff;
+  --popover: #0d0713;
+  --popover-foreground: #fff;
   --primary: #7603eb;
   --primary-foreground: #fff;
   --secondary: #1a0d27;
@@ -54,6 +59,7 @@
   --brand-pink: #fe025d;
   --brand-purple: #7603eb;
   --brand-violet: #a855f7;
+  --whatsapp: #25d366;
 }
 
 @property --gradient-angle {
@@ -550,6 +556,85 @@ h1 > span {
 .privacy p {
   margin-top: 10px;
 }
+.whatsapp-dialog {
+  overflow: hidden;
+  gap: 20px;
+  padding: 32px;
+  border: 1px solid color-mix(in oklch, var(--whatsapp), transparent 58%);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(in oklch, var(--whatsapp), transparent 86%),
+      transparent 44%
+    ),
+    var(--popover);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+.whatsapp-dialog-accent {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, #128c7e, var(--whatsapp), #7df5a7);
+}
+.whatsapp-dialog-icon {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border: 1px solid color-mix(in oklch, var(--whatsapp), white 18%);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--whatsapp), transparent 86%);
+  color: var(--whatsapp);
+  box-shadow: 0 0 38px color-mix(in oklch, var(--whatsapp), transparent 70%);
+}
+.whatsapp-dialog-icon svg {
+  width: 38px;
+  height: 38px;
+}
+.whatsapp-dialog-kicker {
+  color: var(--whatsapp);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.whatsapp-dialog [data-slot="dialog-title"] {
+  font-size: clamp(1.8rem, 7vw, 2.35rem);
+  line-height: 0.95;
+  font-weight: 700;
+}
+.whatsapp-dialog [data-slot="dialog-description"] {
+  max-width: 38ch;
+  color: #c9c1d3;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.whatsapp-dialog-note {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted-foreground);
+  font-size: 0.76rem;
+  text-align: center;
+}
+.whatsapp-dialog [data-slot="dialog-footer"] {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.whatsapp-dialog [data-slot="button"] {
+  min-height: 58px;
+  border-radius: 10px;
+  box-shadow: 0 14px 34px color-mix(in oklch, var(--whatsapp), transparent 76%);
+}
+.whatsapp-dialog [data-slot="button"] svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
 .footer {
   min-height: 95px;
   display: flex;
@@ -780,6 +865,25 @@ h1 > span {
   }
   .signup-card {
     padding: 22px 17px;
+  }
+  .whatsapp-dialog {
+    gap: 16px;
+    padding: 26px 18px 20px;
+  }
+  .whatsapp-dialog-icon {
+    width: 64px;
+    height: 64px;
+  }
+  .whatsapp-dialog-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+  .whatsapp-dialog [data-slot="button"] {
+    min-height: 56px;
+    padding-inline: 14px;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    white-space: normal;
   }
   .footer {
     flex-wrap: wrap;

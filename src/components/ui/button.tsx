@@ -10,6 +10,8 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
         shiny: "shiny-cta",
+        whatsapp:
+          "bg-whatsapp text-white hover:bg-[color-mix(in_oklch,var(--whatsapp),black_12%)]",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
