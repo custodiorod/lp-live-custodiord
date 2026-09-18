@@ -193,6 +193,7 @@
 }
 .hero-copy {
   width: min(620px, 54%);
+  contain: layout;
 }
 .hero-logo {
   display: block;
@@ -695,7 +696,8 @@ h1 > span {
     position: relative;
     order: 2;
     width: 100%;
-    height: min(120vw, 850px);
+    height: auto;
+    aspect-ratio: 720 / 813;
   }
   .hero-bg::after {
     content: "";
@@ -838,8 +840,9 @@ h1 > span {
     white-space: normal;
   }
   .hero-bg {
-    height: 134vw;
-    max-height: 710px;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 720 / 813;
   }
   .topic-band .shell {
     gap: 11px;

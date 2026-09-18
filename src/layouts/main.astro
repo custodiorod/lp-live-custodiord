@@ -1,5 +1,8 @@
 ---
 import "@/styles/global.css"
+import barlow600Url from "@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url"
+import barlow700Url from "@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url"
+import dmSansUrl from "@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url"
 
 interface Props {
   title?: string
@@ -18,21 +21,54 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content={description} />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link
+      rel="preload"
+      href="/hero-bg-mobile-720.avif"
+      as="image"
+      type="image/avif"
+      media="(max-width: 720px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/hero-bg-desktop.avif"
+      as="image"
+      type="image/avif"
+      media="(min-width: 721px)"
+      fetchpriority="high"
+    />
+    <link rel="preload" href={dmSansUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={barlow600Url} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={barlow700Url} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/webp" href="/logo-64.webp" />
     <title>{title}</title>
     <!-- Google Tag Manager -->
     <script is:inline>
       ;(function (w, d, s, l, i) {
-        w[l] = w[l] || []
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : ""
-        j.async = true
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl
-        f.parentNode.insertBefore(j, f)
+        var loaded = false
+        var load = function () {
+          if (loaded) return
+          loaded = true
+          w[l] = w[l] || []
+          w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" })
+          var firstScript = d.getElementsByTagName(s)[0]
+          var script = d.createElement(s)
+          var dataLayerParam = l != "dataLayer" ? "&l=" + l : ""
+          script.async = true
+          script.src =
+            "https://www.googletagmanager.com/gtm.js?id=" + i + dataLayerParam
+          firstScript.parentNode.insertBefore(script, firstScript)
+        }
+        var events = ["pointerdown", "keydown", "touchstart"]
+        events.forEach(function (eventName) {
+          w.addEventListener(eventName, load, { once: true, passive: true })
+        })
+        if ("requestIdleCallback" in w) {
+          w.requestIdleCallback(load, { timeout: 2500 })
+        } else {
+          w.setTimeout(load, 1800)
+        }
       })(window, document, "script", "dataLayer", "GTM-P5R6QPTC")
     </script>
     <!-- End Google Tag Manager -->
